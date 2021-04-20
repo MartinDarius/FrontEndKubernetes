@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap');
+
+.Login{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    background: url("C:\Darius\KubernetesEditorFrontEnd-master\react-kubernetes\src\assets\images\kubernetes-background.png");
+   
+}
+
+.header {
+      font-size: 34px;
+      font-family: "Open Sans", sans-serif;  
+      text-align: center;
+      color: #2387c8;
+      background-color: white;
+}
+
+.content{
+    display:flex;
+    flex-direction: column;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: #ffffff;
+}
+
+.image{
+    width: 1em;
+    background-color: white;
+    padding: 8px;
+    height: 50%;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 5px;
+
+}
+.image img{
+    height: 100%;
+    border-radius: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.form{
+    margin-top: 2em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.formGroup{
+    display:flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: fit-content;
+
+}
+
+.label{
+    font-size: 20px;
+}
+
+.input{
+    margin-top:6px;
+    min-width: 18em;
+    height: 37px;
+    padding: 0px 10px;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #f3f3f3;
+    border: 0;
+    border-radius: 4px;
+    margin-bottom: 31px;
+    transition: all 250ms eas-in-out;
+    
+}
+.input:focus{
+    outline:none;
+    box-shadow: 0px 0px 12px 0.8px #0e81ce96;
+}
+
+.buttons{
+    margin-top: 3em;
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 30px;
+
+}
+
+.button{
+    font-size: 21px;
+    padding: 5px 20px;
+    border: 0;
+    background-color: #3498db;
+    color: white;
+    border-radius: 3px;
+    transition: all 250ms ease-in-out;
+    cursor: pointer;
+}
+
+.button:hover{
+    background-color: #2387c8;
+}
+
+.button:focus{
+    outline: none;
+}
+
+
+@media all and (min-width: 480px) {
+    .Login {
+      padding: 60px 0;
+    }
+  
+    .Login form {
+      margin: 0 auto;
+      max-width: 320px;
+    }
+  }

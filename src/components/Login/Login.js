@@ -18,7 +18,7 @@ class Login extends React.Component {
 
   validateData = () => {
     let ok=true;
-    if (this.state.email.length === 0 || this.state.password.length === 0)
+    if (this.state.email.length === 0 || this.state.password.length < 6)
       ok=false;
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return ok && re.test(String(this.state.email).toLowerCase());
@@ -71,6 +71,7 @@ class Login extends React.Component {
                 <Form.Label className="label">Email</Form.Label>
                 <Form.Control className="input"
                   autoFocus
+                  placeholder="Mail address"
                   type="email"
                   value={this.state.email}
                   onChange={(e) => this.setState({
@@ -82,6 +83,7 @@ class Login extends React.Component {
                 <Form.Label className="label">Password</Form.Label>
                 <Form.Control className="input"
                   type="password"
+                  placeholder="Password"
                   value={this.state.password}
                   onChange={(e) => this.setState({password: e.target.value})}
                 />

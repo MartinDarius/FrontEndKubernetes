@@ -1,15 +1,15 @@
 //import React from 'react';
 import * as RJD from 'react-js-diagrams';
-import { ConnectionWidgetFactory } from './nodes/connection/ConnectionWidgetFactory';
-import { ConnectionNodeFactory } from './nodes/connection/ConnectionInstanceFactories';
-import { PodWidgetFactory } from './nodes/pod/PodWidgetFactory';
-import { PodNodeFactory } from './nodes/pod/PodInstanceFactories';
-import { DeploymentWidgetFactory } from './nodes/deployment/DeploymentWidgetFactory';
-import { DeploymentNodeFactory } from './nodes/deployment/DeploymentInstanceFactories';
-import { ServiceWidgetFactory } from './nodes/service/ServiceWidgetFactory';
-import { ServiceNodeFactory } from './nodes/service/ServiceInstanceFactories';
-import { IngressWidgetFactory } from './nodes/ingress/IngressWidgetFactory';
-import { IngressNodeFactory } from './nodes/ingress/IngressInstanceFactories';
+import { ConnectionWidgetFactory } from '../nodes/connection/ConnectionWidgetFactory';
+import { ConnectionNodeFactory } from '../nodes/connection/ConnectionInstanceFactories';
+import { PodWidgetFactory } from '../nodes/pod/PodWidgetFactory';
+import { PodNodeFactory } from '../nodes/pod/PodInstanceFactories';
+import { DeploymentWidgetFactory } from '../nodes/deployment/DeploymentWidgetFactory';
+import { DeploymentNodeFactory } from '../nodes/deployment/DeploymentInstanceFactories';
+import { ServiceWidgetFactory } from '../nodes/service/ServiceWidgetFactory';
+import { ServiceNodeFactory } from '../nodes/service/ServiceInstanceFactories';
+import { IngressWidgetFactory } from '../nodes/ingress/IngressWidgetFactory';
+import { IngressNodeFactory } from '../nodes/ingress/IngressInstanceFactories';
 
 
 

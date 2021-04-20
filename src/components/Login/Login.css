@@ -107,6 +107,11 @@
     outline: none;
 }
 
+.button:disabled{
+    color: #ccc;
+    cursor: not-allowed;
+}
+
 
 @media all and (min-width: 480px) {
     .Login {

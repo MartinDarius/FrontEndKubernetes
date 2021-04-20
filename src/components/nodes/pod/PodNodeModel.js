@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import * as RJD from 'react-js-diagrams';
-//import {globalConst} from './../../../App';
-import { store } from './../../../store';
-import { updateModel } from './../../../actions';
+import {store} from '../../store/store';
+import {updateModel} from '../../store/actions/diagram';
+
 
 export class PodNodeModel extends RJD.NodeModel {
   constructor(name = 'Untitled', color = 'rgb(224, 98, 20)') {

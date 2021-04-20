@@ -1,9 +1,9 @@
 import React from 'react';
 import DragWrapper from './DragWrapper';
-import { PodNodeWidget } from './nodes/pod/PodNodeWidget';
-import { DeploymentNodeWidget } from './nodes/deployment/DeploymentNodeWidget';
-import { ServiceNodeWidget } from './nodes/service/ServiceNodeWidget';
-import { IngressNodeWidget } from './nodes/ingress/IngressNodeWidget';
+import { PodNodeWidget } from '../nodes/pod/PodNodeWidget';
+import { DeploymentNodeWidget } from '../nodes/deployment/DeploymentNodeWidget';
+import { ServiceNodeWidget } from '../nodes/service/ServiceNodeWidget';
+import { IngressNodeWidget } from '../nodes/ingress/IngressNodeWidget';
 
 class Node extends React.Component {
   renderNode() {

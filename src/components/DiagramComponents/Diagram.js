@@ -2,10 +2,10 @@ import React from 'react';
 //import _ from 'lodash';
 import { DropTarget } from 'react-dnd';
 import * as RJD from 'react-js-diagrams';
-import { PodNodeModel } from './nodes/pod/PodNodeModel';
-import { DeploymentNodeModel } from './nodes/deployment/DeploymentNodeModel';
-import { ServiceNodeModel } from './nodes/service/ServiceNodeModel';
-import { IngressNodeModel } from './nodes/ingress/IngressNodeModel';
+import { PodNodeModel } from '../nodes/pod/PodNodeModel';
+import { DeploymentNodeModel } from '../nodes/deployment/DeploymentNodeModel';
+import { ServiceNodeModel } from '../nodes/service/ServiceNodeModel';
+import { IngressNodeModel } from '../nodes/ingress/IngressNodeModel';
 
 
 

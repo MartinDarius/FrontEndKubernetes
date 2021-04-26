@@ -10,3 +10,5 @@ const logger = createLogger({
 });
 
 export const store = applyMiddleware(logger)(compose(createStore))(reducer);
+
+//export const store = createStore(reducer,composeEnhancers(applyMiddleware(thunk)));

@@ -12,6 +12,7 @@ html, body, #root {
   display: flex;
   flex-direction: row;
   position: relative;
+  height: 100%;
 }
 .parent-container .nodes-panel {
   flex: 0 0 8rem;

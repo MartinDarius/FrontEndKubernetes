@@ -1,0 +1,32 @@
+.Toolbar {
+    height: 56px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #888888;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+    z-index: 90;
+    flex-shrink: 0;
+}
+
+.Toolbar .nav {
+    height: 100%;
+}
+
+.Content{
+    margin-top: 55px;
+    height: 100%;
+}
+
+.ceva {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+}

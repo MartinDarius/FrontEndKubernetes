@@ -1,9 +1,9 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
-import { PodNodeModel } from './PodNodeModel';
+import { SecretNodeModel } from './SecretNodeModel';
 import FormDialog from '../../Form';
 
-export class PodNodeWidget extends React.Component {
+export class SecretNodeWidget extends React.Component {
   static defaultProps = {
     node: null,
     color: 'rgb(224, 98, 20)'
@@ -20,7 +20,7 @@ export class PodNodeWidget extends React.Component {
     let inputNode = node;
 
     if (displayOnly) {
-      inputNode = new PodNodeModel(node.name, color);
+      inputNode = new SecretNodeModel(node.name, color);
     }
 
     return inputNode.getInPort ? <RJD.DefaultPortLabel model={inputNode.getInPort()} key='in-port' /> : null;
@@ -31,7 +31,7 @@ export class PodNodeWidget extends React.Component {
     let outputNode = node;
 
     if (displayOnly) {
-      outputNode = new PodNodeModel(node.name, color);
+      outputNode = new SecretNodeModel(node.name, color);
     }
 
     return outputNode.getOutPort ? <RJD.DefaultPortLabel model={outputNode.getOutPort()} key='out-port' /> : null;
@@ -67,5 +67,5 @@ export class PodNodeWidget extends React.Component {
   }
 }
 
-export const PodNodeWidgetFactory = React.createFactory(PodNodeWidget);
-//export const PodNodeWidgetFactory = React.createElement(PodNodeWidget);
+export const SecretNodeWidgetFactory = React.createFactory(SecretNodeWidget);
+

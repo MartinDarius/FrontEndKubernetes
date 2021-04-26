@@ -4,6 +4,7 @@ import { PodNodeWidget } from '../nodes/pod/PodNodeWidget';
 import { DeploymentNodeWidget } from '../nodes/deployment/DeploymentNodeWidget';
 import { ServiceNodeWidget } from '../nodes/service/ServiceNodeWidget';
 import { IngressNodeWidget } from '../nodes/ingress/IngressNodeWidget';
+import { ConfigMapNodeWidget } from '../nodes/ConfigMap/ConfigMapNodeWidget';
 
 class Node extends React.Component {
   renderNode() {
@@ -20,6 +21,12 @@ class Node extends React.Component {
     }
     if (type === 'ingress') {
       return <IngressNodeWidget node={{ name: 'Ingress' }} color={color} displayOnly />;
+    }
+    if (type === 'configMap') {
+      return <ConfigMapNodeWidget node={{ name: 'ConfigMap' }} color={color} displayOnly />;
+    }
+    if (type === 'secret') {
+      return <ConfigMapNodeWidget node={{ name: 'Secret' }} color={color} displayOnly />;
     }
     console.warn('Unknown node type');
     return null;
@@ -52,6 +59,13 @@ export class NodesPanel extends React.Component {
         <div className='node-wrapper'>
           <Node type='ingress' color='rgb(50, 100, 180)' />
         </div>
+        <div className='node-wrapper'>
+          <Node type='configMap' color='rgb(70, 120, 120)' />
+        </div>
+        <div className='node-wrapper'>
+          <Node type='secret' color='rgb(150, 40, 120)' />
+        </div>
+        
       </div>
     );
   }

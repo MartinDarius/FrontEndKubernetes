@@ -1,107 +1,142 @@
-import React from 'react';
-import {setCookie} from '../../cookieHandler';
+import React from "react";
+import { setCookie } from "../../cookieHandler";
 //import _ from 'lodash';
 import "./Login.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import loginImg from '../../assets/images/kubernetes.png';
-import { Alert } from 'react-bootstrap';
+import loginImg from "../../assets/images/kubernetes.png";
+import ErrorModal from './ErrorModal/ErrorModal';
+import Backdrop from './ErrorModal/Backdrop';
 
+import axios from "axios";
 
 class Login extends React.Component {
-  
-  
-  state={
-    email: '',
-    password: ''
-  }
+  state = {
+    email: "aaa@aaa.com",
+    password: "aaa123",
+    error: false,
+  };
 
   validateData = () => {
-    let ok=true;
+    let ok = true;
     if (this.state.email.length === 0 || this.state.password.length < 6)
-      ok=false;
+      ok = false;
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return ok && re.test(String(this.state.email).toLowerCase());
-  }
+  };
 
+  onLogin = (event) => {
+    const authData = {
+      email: this.state.email,
+      password: this.state.password,
+      returnSecureToken: true,
+    };
+    axios
+      .post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAnb1vd5rxrNJbJWbAoftTrKNIKwiV0JLk",
+        authData
+      )
+      .then((response) => {
+        console.log(response);
+        setCookie("userSession", response.data.idToken);
+        document.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ error: true });
+      });
+      event.preventDefault();
+  };
 
-  onLogin = () => {
-    //   _.ajax({
-    //       url: '',
-    //       method: 'POST',
-    //       data: JSON.stringify({username: '', password: ''}),
-    //       success: (data) => {
-    //         setCookie('userSession', data);
-    //         document.location.reload();
-    //       }
-    //   })
-    if(this.state.email==='martin.darius@yahoo.com' && this.state.password=== 'darius'){
-      setTimeout(() => {
-          setCookie('userSession','a');
+  onRegister = (event) => {
+    const authData = {
+      email: this.state.email,
+      password: this.state.password,
+      returnSecureToken: true,
+    };
+    axios
+      .post(
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAnb1vd5rxrNJbJWbAoftTrKNIKwiV0JLk",
+        authData
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({ error: true });
+      });
 
-          document.location.reload();
-      },1000 );
-    }
-    else{
-      <Alert color="danger">
-          This is a danger alert — check it out!
-      </Alert>
-    }
-  }
-
-  onRegister = () => {
-    console.log(this.state.email);
-    console.log(this.state.password);
-  }
-
-  handleSubmit = (event) => {
     event.preventDefault();
+  };
+
+  closeModal = () => {
+    this.setState({ error: false });
   }
 
-  render(){	 
-    return(
+  render() {
+    return (
       <div className="Login">
         <div className="content">
           <div className="header">Login</div>
-            <div className="image">
-              <img src={loginImg} alt="" />
-            </div>
-            <Form className="form" onSubmit={this.handleSubmit}>
-              <Form.Group className="formGroup" size="lg" controlId="email">
-                <Form.Label className="label">Email</Form.Label>
-                <Form.Control className="input"
-                  autoFocus
-                  placeholder="Mail address"
-                  type="email"
-                  value={this.state.email}
-                  onChange={(e) => this.setState({
-                                  email: e.target.value
-                                  })}
-                />
-              </Form.Group>
-              <Form.Group className="formGroup" size="lg" controlId="password">
-                <Form.Label className="label">Password</Form.Label>
-                <Form.Control className="input"
-                  type="password"
-                  placeholder="Password"
-                  value={this.state.password}
-                  onChange={(e) => this.setState({password: e.target.value})}
-                />
-              </Form.Group>
-              <div className="buttons">
-              <Button  className="button" block size="lg" type="submit" disabled={!this.validateData()} onClick={this.onLogin}>
+          <div className="image">
+            <img src={loginImg} alt="" />
+          </div>
+          <Form className="form">
+            <Form.Group className="formGroup" size="lg" controlId="email">
+              <Form.Label className="label">Email</Form.Label>
+              <Form.Control
+                className="input"
+                autoFocus
+                placeholder="Mail address"
+                type="email"
+                value={this.state.email}
+                onChange={(e) =>
+                  this.setState({
+                    email: e.target.value,
+                  })
+                }
+              />
+            </Form.Group>
+            <Form.Group className="formGroup" size="lg" controlId="password">
+              <Form.Label className="label">Password</Form.Label>
+              <Form.Control
+                className="input"
+                type="password"
+                placeholder="Password"
+                value={this.state.password}
+                onChange={(e) => this.setState({ password: e.target.value })}
+              />
+            </Form.Group>
+            <div className="buttons">
+              <Button
+                className="button"
+                block
+                size="lg"
+                type="submit"
+                disabled={!this.validateData()}
+                onClick={this.onLogin}
+              >
                 Login
               </Button>
-              <Button className="button" block size="lg" type="submit" disabled={!this.validateData()} onClick={this.onRegister}>
-                Register 
+              <Button
+                className="button"
+                block
+                size="lg"
+                type="submit"
+                disabled={!this.validateData()}
+                onClick={this.onRegister}
+              >
+                Register
               </Button>
-              </div>
-            </Form>
+            </div>
+          </Form>
+        </div>
+        {this.state.error  && <ErrorModal onConfirm={this.closeModal}/>}
+        {this.state.error && <Backdrop onClick={this.closeModal}/>}
       </div>
-      </div>
-    )
+    );
   }
 }
 
 export default Login;
-

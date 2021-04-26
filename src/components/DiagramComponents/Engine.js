@@ -10,6 +10,10 @@ import { ServiceWidgetFactory } from '../nodes/service/ServiceWidgetFactory';
 import { ServiceNodeFactory } from '../nodes/service/ServiceInstanceFactories';
 import { IngressWidgetFactory } from '../nodes/ingress/IngressWidgetFactory';
 import { IngressNodeFactory } from '../nodes/ingress/IngressInstanceFactories';
+import { ConfigMapNodeFactory } from '../nodes/ConfigMap/ConfigMapInstanceFactories';
+import { ConfigMapWidgetFactory } from '../nodes/ConfigMap/ConfigMapWidgetFactory';
+import { SecretNodeFactory } from '../nodes/secret/SecretInstanceFactories';
+import { SecretWidgetFactory } from '../nodes/secret/SecretWidgetFactory';
 
 
 
@@ -22,6 +26,10 @@ diagramEngine.registerNodeFactory(new PodWidgetFactory());
 diagramEngine.registerNodeFactory(new DeploymentWidgetFactory());
 diagramEngine.registerNodeFactory(new ServiceWidgetFactory());
 diagramEngine.registerNodeFactory(new IngressWidgetFactory());
+diagramEngine.registerNodeFactory(new ConfigMapWidgetFactory());
+diagramEngine.registerNodeFactory(new SecretWidgetFactory());
+
+
 
 
 
@@ -34,3 +42,5 @@ diagramEngine.registerInstanceFactory(new PodNodeFactory());
 diagramEngine.registerInstanceFactory(new DeploymentNodeFactory());
 diagramEngine.registerInstanceFactory(new ServiceNodeFactory());
 diagramEngine.registerInstanceFactory(new IngressNodeFactory());
+diagramEngine.registerInstanceFactory(new ConfigMapNodeFactory());
+diagramEngine.registerInstanceFactory(new SecretNodeFactory());

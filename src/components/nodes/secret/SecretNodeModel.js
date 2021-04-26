@@ -3,33 +3,24 @@ import * as RJD from "react-js-diagrams";
 import { store } from "../../store/store";
 import { updateModel } from "../../store/actions/diagram";
 
-export class PodNodeModel extends RJD.NodeModel {
+export class SecretNodeModel extends RJD.NodeModel {
   constructor(name = "Untitled", color = "rgb(224, 98, 20)") {
-    super("pod");
+    super("secret");
     this.addPort(new RJD.DefaultPortModel(false, "output", "Depl"));
     this.addPort(new RJD.DefaultPortModel(true, "input", "In"));
     this.name = name;
     this.color = color;
-    this.podName = "";
-    this.image = "";
-    this.containerName = "";
-    this.imagePullPolicy = "";
-    this.command = "";
     this.model = {};
+    this.secretName=" ";
+    this.data="";
   }
 
   deSerialize(object) {
     super.deSerialize(object);
-    console.log("2");
-
     this.name = object.name;
     this.color = object.color;
-    this.podName = object.podName;
-    this.image = object.image;
-    this.containerName = object.containerName;
-    this.imagePullPolicy = object.imagePullPolicy;
-    this.command = object.command;
-    this.model = object.model;
+    this.secretName= object.secretName;
+    this.data= object.data;
   }
 
   serialize() {
@@ -37,35 +28,23 @@ export class PodNodeModel extends RJD.NodeModel {
       name: this.name,
       color: this.color,
       temp: this.generateYAML(),
-      podName: this.podName,
-      image: this.image,
-      containerName: this.containerName,
-      imagePullPolicy: this.imagePullPolicy,
-      command: this.command,
-      model: this.model,
+      secretName: this.secretName,
+      data: this.data
     });
   }
 
   generateYAML() {
     return `apiVersion: v1
-    kind: Pod
+    kind: Secret
     metadata:
-      name:${this.podName}
-    spec:
-      containers:
-        - image: ${this.image}
-          name: ${this.containerName}
-          command: ${this.command}
-          imagePullPolicy: ${this.imagePullPolicy}`;
+      name:${this.secretName}
+    data: ${this.data} `;
   }
 
   getProperties() {
     return {
-      podName: this.podName,
-      image: this.image,
-      containerName: this.containerName,
-      imagePullPolicy: this.imagePullPolicy,
-      command: this.command,
+      secretName: this.secretName,
+      data: this.data
     };
   }
 
@@ -78,8 +57,10 @@ export class PodNodeModel extends RJD.NodeModel {
   }
 
   onSubmit = (properties) => {
-    let podNode = this.model.nodes.filter((item) => item.id === this.id)[0];
-
+    let secretNode = this.model.nodes.filter((item) => item.id === this.id)[0];
+    secretNode.secretName=properties.secretName;
+    secretNode.data=properties.data;
+/*
     podNode.podName = properties.podName;
     podNode.image = properties.image;
     podNode.containerName = properties.containerName;
@@ -137,9 +118,9 @@ export class PodNodeModel extends RJD.NodeModel {
         }
       }
     }
-    //globalConst.updateModel(this.model, {selectedNode: null});
     store.dispatch(
       updateModel(Object.assign({}, this.model), { selectedNode: null })
-    );
+    ); */
   };
+ 
 }

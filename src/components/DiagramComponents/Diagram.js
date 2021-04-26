@@ -6,6 +6,8 @@ import { PodNodeModel } from '../nodes/pod/PodNodeModel';
 import { DeploymentNodeModel } from '../nodes/deployment/DeploymentNodeModel';
 import { ServiceNodeModel } from '../nodes/service/ServiceNodeModel';
 import { IngressNodeModel } from '../nodes/ingress/IngressNodeModel';
+import { ConfigMapNodeModel } from '../nodes/ConfigMap/ConfigMapNodeModel';
+import { SecretNodeModel } from '../nodes/secret/SecretNodeModel';
 
 
 
@@ -36,6 +38,14 @@ const nodesTarget = {
     if (item.type === 'ingress') {
       node = new IngressNodeModel('Ingress', item.color);
     }
+    if (item.type === 'configMap') {
+      node = new ConfigMapNodeModel('ConfigMap', item.color);
+    }
+    if (item.type === 'secret') {
+      node = new SecretNodeModel('Secret', item.color);
+    }
+
+    
 
     node.x = x;
     node.y = y;

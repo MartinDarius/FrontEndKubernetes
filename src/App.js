@@ -1,10 +1,18 @@
-import React from 'react'
-import DiagramBuilder from './DiagramBuilder'
+import React from 'react';
+import DiagramBuilder from './DiagramBuilder';
+import {Route, Switch} from 'react-router-dom';
+import Toolbar from './components/UI/Toolbar/Toolbar'
 
 class App extends React.Component{
     render(){
         return(
-                <DiagramBuilder/>
+            
+            <Toolbar>
+            <Switch>
+             <Route path="/" component={DiagramBuilder}/>
+            </Switch>
+            </Toolbar>
+    
 
         )
     }

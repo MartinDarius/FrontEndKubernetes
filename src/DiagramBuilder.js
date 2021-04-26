@@ -37,9 +37,6 @@ class DiagramBuilder extends React.Component {
   	      	<Controls
   	        	selectedNode={selectedNode}
   	       />
-			<div className='logout-button-container'>
-				<button onClick={this.onLogout}>Logout</button>
-			</div>
 			</div>
 
   	    </DndContext>

@@ -6,21 +6,28 @@ import { updateModel } from "../../store/actions/diagram";
 export class ConfigMapNodeModel extends RJD.NodeModel {
   constructor(name = "Untitled", color = "rgb(224, 98, 20)") {
     super("configMap");
-    this.addPort(new RJD.DefaultPortModel(false, "output", "Depl"));
-    this.addPort(new RJD.DefaultPortModel(true, "input", "In"));
+    this.addPort(new RJD.DefaultPortModel(false, "output", "Pod"));
+    this.addPort(new RJD.DefaultPortModel(true, "input", "Secr"));
     this.name = name;
     this.color = color;
     this.model = {};
-    this.configMapName=" ";
-    this.data="";
+    this.configMapName = " ";
+    this.key = "";
+    this.value = "";
+    this.secretName = "";
+    this.secretKey = "";
   }
 
   deSerialize(object) {
     super.deSerialize(object);
     this.name = object.name;
     this.color = object.color;
-    this.configMapName= object.configMapName;
-    this.data= object.data;
+    this.configMapName = object.configMapName;
+    this.key = object.key;
+    this.value = object.value;
+    this.secretName = object.secretName;
+    this.secretKey = object.secretKey;
+    this.model = object.model;
   }
 
   serialize() {
@@ -29,7 +36,10 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       color: this.color,
       temp: this.generateYAML(),
       configMapName: this.configMapName,
-      data: this.data
+      key: this.key,
+      value: this.value,
+      secretName: this.secretName,
+      secretKey: this.secretKey,
     });
   }
 
@@ -38,13 +48,25 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
     kind: ConfigMap
     metadata:
       name:${this.configMapName}
-    data: ${this.data} `;
+    data: 
+      ${this.key}: ${this.value}`;
   }
 
   getProperties() {
     return {
       configMapName: this.configMapName,
-      data: this.data
+      key: this.key,
+      value: this.value,
+    };
+  }
+
+  getAllProperties() {
+    return {
+      configMapName: this.configMapName,
+      configMapKey: this.key,
+      value: this.value,
+      secretName: this.secretName,
+      secretKey: this.secretKey,
     };
   }
 
@@ -57,15 +79,13 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
   }
 
   onSubmit = (properties) => {
-    let configMapNode = this.model.nodes.filter((item) => item.id === this.id)[0];
-    configMapNode.configMapName=properties.configMapName;
-    configMapNode.data=properties.data;
-/*
-    podNode.podName = properties.podName;
-    podNode.image = properties.image;
-    podNode.containerName = properties.containerName;
-    podNode.imagePullPolicy = properties.imagePullPolicy;
-    podNode.command = properties.command;
+    
+    let configMapNode = this.model.nodes.filter(
+      (item) => item.id === this.id
+    )[0];
+    configMapNode.configMapName = properties.configMapName;
+    configMapNode.key = properties.key;
+    configMapNode.value = properties.value;
 
     if (
       !(
@@ -73,7 +93,7 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
         this.getOutPort().links.constructor === Object
       )
     ) {
-      let deploymentId =
+      let podId =
         this.getOutPort()
           .getLinks()
           [Object.keys(this.getOutPort().getLinks())[0]].getTargetPort()
@@ -90,37 +110,16 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
               .getParent()
               .getID();
 
-      let deploymentNode = this.model.nodes.filter(
-        (item) => item.id === deploymentId
-      )[0];
-      deploymentNode.podName = properties.podName;
-      deploymentNode.image = properties.image;
-      deploymentNode.containerName = properties.containerName;
-      deploymentNode.imagePullPolicy = properties.imagePullPolicy;
-
-      let links = deploymentNode.ports[1].links;
-      let allLinks = this.model.links;
-      console.log(allLinks);
-
-      let podNode;
-      for (let i = 0; i < links.length; i++) {
-        for (let j = 0; j < allLinks.length; j++) {
-          if (links[i] === allLinks[j].id) {
-            podNode = this.model.nodes.filter(
-              (item) => item.id === allLinks[j].source
-            )[0];
-            podNode.podName = properties.podName;
-            podNode.image = properties.image;
-            podNode.containerName = properties.containerName;
-            podNode.imagePullPolicy = properties.imagePullPolicy;
-            podNode.command = properties.command;
-          }
-        }
-      }
+      let podNode = this.model.nodes.filter((item) => item.id === podId)[0];
+      podNode.secretName=configMapNode.secretName;
+      podNode.secretKey=configMapNode.secretKey;
+      podNode.configMapName=configMapNode.configMapName;
+      podNode.configMapKey=configMapNode.key;
+      
     }
+    
     store.dispatch(
       updateModel(Object.assign({}, this.model), { selectedNode: null })
-    ); */
+    );
   };
- 
 }

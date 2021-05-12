@@ -1,6 +1,5 @@
 import { createStore, compose, applyMiddleware } from 'redux';
 import {createLogger} from 'redux-logger';
-//import { reducer } from './reducer';
 import reducer from './reducers/diagram';
 
 
@@ -11,4 +10,3 @@ const logger = createLogger({
 
 export const store = applyMiddleware(logger)(compose(createStore))(reducer);
 
-//export const store = createStore(reducer,composeEnhancers(applyMiddleware(thunk)));

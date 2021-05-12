@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
 import { DeploymentNodeModel } from './DeploymentNodeModel';
-import FormDialog from '../../Form';
+import FormDialog from '../../UI/Form/Form';
 
 export class DeploymentNodeWidget extends React.Component {
   static defaultProps = {

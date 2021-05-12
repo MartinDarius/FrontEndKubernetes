@@ -1,9 +1,9 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
-import { ConfigMapNodeModel } from './ConfigMapNodeModel';
+import { StorageClassNodeModel } from './StorageClassNodeModel';
 import FormDialog from '../../UI/Form/Form';
 
-export class ConfigMapNodeWidget extends React.Component {
+export class StorageClassNodeWidget extends React.Component {
   static defaultProps = {
     node: null,
     color: 'rgb(224, 98, 20)'
@@ -20,7 +20,7 @@ export class ConfigMapNodeWidget extends React.Component {
     let inputNode = node;
 
     if (displayOnly) {
-      inputNode = new ConfigMapNodeModel(node.name, color);
+      inputNode = new StorageClassNodeModel(node.name, color);
     }
 
     return inputNode.getInPort ? <RJD.DefaultPortLabel model={inputNode.getInPort()} key='in-port' /> : null;
@@ -31,7 +31,7 @@ export class ConfigMapNodeWidget extends React.Component {
     let outputNode = node;
 
     if (displayOnly) {
-      outputNode = new ConfigMapNodeModel(node.name, color);
+      outputNode = new StorageClassNodeModel(node.name, color);
     }
 
     return outputNode.getOutPort ? <RJD.DefaultPortLabel model={outputNode.getOutPort()} key='out-port' /> : null;
@@ -67,5 +67,5 @@ export class ConfigMapNodeWidget extends React.Component {
   }
 }
 
-export const ConfigMapNodeWidgetFactory = React.createFactory(ConfigMapNodeWidget);
+export const StorageClassNodeWidgetFactory = React.createFactory(StorageClassNodeWidget);
 

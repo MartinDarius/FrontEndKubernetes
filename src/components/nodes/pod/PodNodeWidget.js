@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
 import { PodNodeModel } from './PodNodeModel';
-import FormDialog from '../../Form';
+import FormDialog from '../../UI/Form/Form';
 
 export class PodNodeWidget extends React.Component {
   static defaultProps = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
 import { IngressNodeModel } from './IngressNodeModel';
-import FormDialog from '../../Form';
+import FormDialog from '../../UI/Form/Form';
 
 
 export class IngressNodeWidget extends React.Component {

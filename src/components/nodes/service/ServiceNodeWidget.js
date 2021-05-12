@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
 import { ServiceNodeModel } from './ServiceNodeModel';
-import FormDialog from '../../Form';
+import FormDialog from '../../UI/Form/Form';
 
 export class ServiceNodeWidget extends React.Component {
   static defaultProps = {

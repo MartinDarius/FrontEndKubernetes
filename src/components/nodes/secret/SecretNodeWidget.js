@@ -1,7 +1,7 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
 import { SecretNodeModel } from './SecretNodeModel';
-import FormDialog from '../../Form';
+import FormDialog from '../../UI/Form/Form';
 
 export class SecretNodeWidget extends React.Component {
   static defaultProps = {

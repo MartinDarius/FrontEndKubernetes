@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import SettingsIcon from '@material-ui/icons/Settings';
+import classes from './Form.module.css';
 
 export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
@@ -50,9 +51,11 @@ export default function FormDialog(props) {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen} className="settingsButton">
+      <div >
+      <Button variant="outlined" color="primary" onClick={handleClickOpen} className={classes.settingsButton} >    
       <SettingsIcon></SettingsIcon>
       </Button>
+      </div>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Properties</DialogTitle>
         <DialogContent>

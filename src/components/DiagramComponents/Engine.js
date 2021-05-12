@@ -10,10 +10,17 @@ import { ServiceWidgetFactory } from '../nodes/service/ServiceWidgetFactory';
 import { ServiceNodeFactory } from '../nodes/service/ServiceInstanceFactories';
 import { IngressWidgetFactory } from '../nodes/ingress/IngressWidgetFactory';
 import { IngressNodeFactory } from '../nodes/ingress/IngressInstanceFactories';
-import { ConfigMapNodeFactory } from '../nodes/ConfigMap/ConfigMapInstanceFactories';
-import { ConfigMapWidgetFactory } from '../nodes/ConfigMap/ConfigMapWidgetFactory';
+import { ConfigMapNodeFactory } from '../nodes/configMap/ConfigMapInstanceFactories';
+import { ConfigMapWidgetFactory } from '../nodes/configMap/ConfigMapWidgetFactory';
 import { SecretNodeFactory } from '../nodes/secret/SecretInstanceFactories';
 import { SecretWidgetFactory } from '../nodes/secret/SecretWidgetFactory';
+import { StatefulSetNodeFactory } from '../nodes/statefulSet/StatefulSetInstanceFactories';
+import { StatefulSetWidgetFactory } from '../nodes/statefulSet/StatefulSetWidgetFactory';
+import { StorageClassNodeFactory } from '../nodes/storageClass/StorageClassInstanceFactories';
+import { StorageClassWidgetFactory } from '../nodes/storageClass/StorageClassWidgetFactory';
+import { PersistentVolumeClaimNodeFactory } from '../nodes/persistentVolumeClaim/PersistentVolumeClaimInstanceFactories';
+import { PersistentVolumeClaimWidgetFactory } from '../nodes/persistentVolumeClaim/PersistentVolumeClaimWidgetFactory';
+
 
 
 
@@ -28,6 +35,10 @@ diagramEngine.registerNodeFactory(new ServiceWidgetFactory());
 diagramEngine.registerNodeFactory(new IngressWidgetFactory());
 diagramEngine.registerNodeFactory(new ConfigMapWidgetFactory());
 diagramEngine.registerNodeFactory(new SecretWidgetFactory());
+diagramEngine.registerNodeFactory(new StatefulSetWidgetFactory());
+diagramEngine.registerNodeFactory(new StorageClassWidgetFactory());
+diagramEngine.registerNodeFactory(new PersistentVolumeClaimWidgetFactory());
+
 
 
 
@@ -44,3 +55,7 @@ diagramEngine.registerInstanceFactory(new ServiceNodeFactory());
 diagramEngine.registerInstanceFactory(new IngressNodeFactory());
 diagramEngine.registerInstanceFactory(new ConfigMapNodeFactory());
 diagramEngine.registerInstanceFactory(new SecretNodeFactory());
+diagramEngine.registerInstanceFactory(new StatefulSetNodeFactory());
+diagramEngine.registerInstanceFactory(new StorageClassNodeFactory());
+diagramEngine.registerInstanceFactory(new PersistentVolumeClaimNodeFactory());
+

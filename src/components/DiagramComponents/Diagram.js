@@ -11,6 +11,8 @@ import { SecretNodeModel } from "../nodes/secret/SecretNodeModel";
 import { StatefulSetNodeModel } from "../nodes/statefulSet/StatefulSetNodeModel";
 import { StorageClassNodeModel } from "../nodes/storageClass/StorageClassNodeModel";
 import { PersistentVolumeClaimNodeModel } from "../nodes/persistentVolumeClaim/PersistentVolumeClaimNodeModel";
+import { PersistentVolumeNodeModel } from "../nodes/persistentVolume/PersistentVolumeNodeModel";
+
 
 import { diagramEngine } from "./Engine";
 
@@ -54,6 +56,10 @@ const nodesTarget = {
     if (item.type === "persistentVolumeClaim") {
       node = new PersistentVolumeClaimNodeModel("PersVolClaim", item.color);
     }
+    if (item.type === "persistentVolume") {
+      node = new PersistentVolumeNodeModel("PersVol", item.color);
+    }
+
 
     node.x = x;
     node.y = y;
@@ -209,25 +215,81 @@ class Diagram extends React.Component {
     configMapNode.secretKey = secretProps.secretKey;
   };
 
-  linkBetweenConfigMapAndPod = (model, node1, node2) => {
-    let podNode = {},
-      pod = {},
+  linkBetweenConfigMapAndDepl = (model, node1, node2) => {
+    let deplNode = {},
+      depl = {},
       confMap = {};
-    if (node1.nodeType === "pod") {
-      pod = node1;
+    if (node1.nodeType === "deployment") {
+      depl = node1;
       confMap = node2;
     } else {
-      pod = node2;
+      depl = node2;
       confMap = node1;
     }
-    podNode = model.nodes.filter((item) => item.id === pod.id)[0];
+    deplNode = model.nodes.filter((item) => item.id === depl.id)[0];
     let configMapProps = confMap.getAllProperties();
-    podNode.secretName = configMapProps.secretName;
-    podNode.secretKey = configMapProps.secretKey;
-    podNode.configMapName = configMapProps.configMapName;
-    podNode.configMapKey = configMapProps.configMapKey;
+    deplNode.secretName = configMapProps.secretName;
+    deplNode.secretKey = configMapProps.secretKey;
+    deplNode.configMapName = configMapProps.configMapName;
+    deplNode.configMapKey = configMapProps.configMapKey;
 
   };
+
+  linkBetweenSCAndPVC = (model, node1, node2) => {
+    let PVCNode = {},
+      pvc = {},
+      sc = {};
+    if (node1.nodeType === "storageClass") {
+      sc = node1;
+      pvc = node2;
+    } else {
+      sc = node2;
+      pvc = node1;
+    }
+    PVCNode = model.nodes.filter((item) => item.id === pvc.id)[0];
+    let SCProps = sc.getProperties();
+    PVCNode.storageClassName = SCProps.storageClassName;
+
+  };
+
+  linkBetweenSCAndPV = (model, node1, node2) => {
+    let PVNode = {},
+      pv = {},
+      sc = {};
+    if (node1.nodeType === "storageClass") {
+      sc = node1;
+      pv = node2;
+    } else {
+      sc = node2;
+      pv = node1;
+    }
+    PVNode = model.nodes.filter((item) => item.id === pv.id)[0];
+    let SCProps = sc.getProperties();
+    PVNode.storageClassName = SCProps.storageClassName;
+
+  };
+
+  linkBetweenPVCAndDepl = (model, node1, node2) => {
+    console.log("aici");
+    let deplNode = {},
+      pvc = {},
+      depl = {};
+    if (node1.nodeType === "deployment") {
+      depl = node1;
+      pvc = node2;
+    } else {
+      depl = node2;
+      pvc = node1;
+    }
+    deplNode = model.nodes.filter((item) => item.id === depl.id)[0];
+    let PVCProps = pvc.getProperties();
+    deplNode.mountPath = PVCProps.mountPath;
+    deplNode.volumeName=PVCProps.volumeName;
+    deplNode.claimName= PVCProps.persistentVolumeClaimName;
+
+  };
+
+  
 
   onChange(model, action) {
     console.log("ON DIAGRAM CHANGE");
@@ -296,11 +358,26 @@ class Diagram extends React.Component {
       ) {
         this.linkBetweenSecretAndConfigMap(model, node1, node2);
       } else if (
-        (node1.nodeType === "pod" && node2.nodeType === "configMap") ||
-        (node1.nodeType === "configMap" && node2.nodeType === "pod")
+        (node1.nodeType === "deployment" && node2.nodeType === "configMap") ||
+        (node1.nodeType === "configMap" && node2.nodeType === "deployment")
       ) {
-        this.linkBetweenConfigMapAndPod(model, node1, node2);
-      }
+        this.linkBetweenConfigMapAndDepl(model, node1, node2);
+      } else if (
+        (node1.nodeType === "storageClass" && node2.nodeType === "persistentVolumeClaim") ||
+        (node1.nodeType === "persistentVolumeClaim" && node2.nodeType === "storageClass")
+      ) {
+        this.linkBetweenSCAndPVC(model, node1, node2);
+      } else if (
+        (node1.nodeType === "deployment" && node2.nodeType === "persistentVolumeClaim") ||
+        (node1.nodeType === "persistentVolumeClaim" && node2.nodeType === "deployment")
+      ) {
+        this.linkBetweenPVCAndDepl(model, node1, node2);
+      } else if (
+        (node1.nodeType === "storageClass" && node2.nodeType === "persistentVolume") ||
+        (node1.nodeType === "persistentVolume" && node2.nodeType === "storageClass")
+      ) {
+        this.linkBetweenSCAndPV(model, node1, node2);
+      } 
     }
 
     this.props.updateModel(model);

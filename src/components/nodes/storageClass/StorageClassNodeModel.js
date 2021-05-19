@@ -6,7 +6,7 @@ import { updateModel } from "../../store/actions/diagram";
 export class StorageClassNodeModel extends RJD.NodeModel {
   constructor(name = "Untitled", color = "rgb(224, 98, 20)") {
     super("storageClass");
-    this.addPort(new RJD.DefaultPortModel(false, "output", "Depl"));
+    this.addPort(new RJD.DefaultPortModel(false, "output", "PVC"));
     this.addPort(new RJD.DefaultPortModel(true, "input", "In"));
     this.name = name;
     this.color = color;
@@ -83,7 +83,7 @@ export class StorageClassNodeModel extends RJD.NodeModel {
     storageClassNode.storageAccount=properties.storageAccount;
     storageClassNode.reclaimPolicy=properties.reclaimPolicy;
     storageClassNode.allowVolExp=properties.allowVolExp;
-/*
+
 
     if (
       !(
@@ -91,51 +91,31 @@ export class StorageClassNodeModel extends RJD.NodeModel {
         this.getOutPort().links.constructor === Object
       )
     ) {
-      let deploymentId =
+      for(let i=0; i<Object.keys(this.getOutPort().links).length;i++){
+      let persVolClaimId =
         this.getOutPort()
           .getLinks()
-          [Object.keys(this.getOutPort().getLinks())[0]].getTargetPort()
+          [Object.keys(this.getOutPort().getLinks())[i]].getTargetPort()
           .getParent()
           .getID() === this.id
           ? this.getOutPort()
               .getLinks()
-              [Object.keys(this.getOutPort().getLinks())[0]].getSourcePort()
+              [Object.keys(this.getOutPort().getLinks())[i]].getSourcePort()
               .getParent()
               .getID()
           : this.getOutPort()
               .getLinks()
-              [Object.keys(this.getOutPort().getLinks())[0]].getTargetPort()
+              [Object.keys(this.getOutPort().getLinks())[i]].getTargetPort()
               .getParent()
               .getID();
 
-      let deploymentNode = this.model.nodes.filter(
-        (item) => item.id === deploymentId
+      let persVolClaimNode = this.model.nodes.filter(
+        (item) => item.id === persVolClaimId
       )[0];
-      deploymentNode.podName = properties.podName;
-      deploymentNode.image = properties.image;
-      deploymentNode.containerName = properties.containerName;
-      deploymentNode.imagePullPolicy = properties.imagePullPolicy;
 
-      let links = deploymentNode.ports[1].links;
-      let allLinks = this.model.links;
-      console.log(allLinks);
-
-      let podNode;
-      for (let i = 0; i < links.length; i++) {
-        for (let j = 0; j < allLinks.length; j++) {
-          if (links[i] === allLinks[j].id) {
-            podNode = this.model.nodes.filter(
-              (item) => item.id === allLinks[j].source
-            )[0];
-            podNode.podName = properties.podName;
-            podNode.image = properties.image;
-            podNode.containerName = properties.containerName;
-            podNode.imagePullPolicy = properties.imagePullPolicy;
-            podNode.command = properties.command;
-          }
-        }
+      persVolClaimNode.storageClassName = properties.storageClassName;
       }
-    }*/
+    }
     store.dispatch(
       updateModel(Object.assign({}, this.model), { selectedNode: null })
     ); 

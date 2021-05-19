@@ -1,9 +1,10 @@
 import React from 'react';
 import * as RJD from 'react-js-diagrams';
-import { PodNodeModel } from './PodNodeModel';
+import { PersistentVolumeNodeModel } from './PersistentVolumeNodeModel';
 import FormDialog from '../../UI/Form/Form';
 
-export class PodNodeWidget extends React.Component {
+
+export class PersistentVolumeNodeWidget extends React.Component {
   static defaultProps = {
     node: null,
     color: 'rgb(224, 98, 20)'
@@ -20,7 +21,7 @@ export class PodNodeWidget extends React.Component {
     let inputNode = node;
 
     if (displayOnly) {
-      inputNode = new PodNodeModel(node.name, color);
+      inputNode = new PersistentVolumeNodeModel(node.name, color);
     }
 
     return inputNode.getInPort ? <RJD.DefaultPortLabel model={inputNode.getInPort()} key='in-port' /> : null;
@@ -31,7 +32,7 @@ export class PodNodeWidget extends React.Component {
     let outputNode = node;
 
     if (displayOnly) {
-      outputNode = new PodNodeModel(node.name, color);
+      outputNode = new PersistentVolumeNodeModel(node.name, color);
     }
 
     return outputNode.getOutPort ? <RJD.DefaultPortLabel model={outputNode.getOutPort()} key='out-port' /> : null;
@@ -51,7 +52,7 @@ export class PodNodeWidget extends React.Component {
           <div className='name'>
             {name}
           </div>
-          {displayOnly? '' :<FormDialog properties={node.getProperties ? node.getSomeProperties() : null} onSubmit={node.onSubmit}/>}
+          {displayOnly? '' :<FormDialog properties={node.getProperties ? node.getProperties() : null} onSubmit={node.onSubmit}/>}
           {!displayOnly ? <div className='fa fa-close' onClick={this.onRemove.bind(this)} /> : null}
         </div>
         <div className='ports'>
@@ -67,5 +68,5 @@ export class PodNodeWidget extends React.Component {
   }
 }
 
-export const PodNodeWidgetFactory = React.createFactory(PodNodeWidget);
-//export const PodNodeWidgetFactory = React.createElement(PodNodeWidget);
+export const PersistentVolumeNodeWidgetFactory = React.createFactory(PersistentVolumeNodeWidget);
+

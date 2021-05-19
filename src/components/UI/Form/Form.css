@@ -1,0 +1,23 @@
+.settingsButton{
+    cursor: pointer;
+  }
+
+  .icon{
+      position: absolute;
+      width: 25px;
+      height: 15px;
+  }
+
+  button.MuiButtonBase-root {
+    border: none;
+  }
+
+  span > svg.MuiSvgIcon-root {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+  }
+
+  span > svg.MuiSvgIcon-root > path {
+      fill: #000000;
+  }

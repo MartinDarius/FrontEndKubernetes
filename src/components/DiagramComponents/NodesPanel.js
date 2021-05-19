@@ -9,6 +9,7 @@ import { StatefulSetNodeWidget } from '../nodes/statefulSet/StatefulSetNodeWidge
 import { SecretNodeWidget } from '../nodes/secret/SecretNodeWidget';
 import { StorageClassNodeWidget } from '../nodes/storageClass/StorageClassNodeWidget';
 import { PersistentVolumeClaimNodeWidget } from '../nodes/persistentVolumeClaim/PersistentVolumeClaimNodeWidget';
+import { PersistentVolumeNodeWidget } from '../nodes/persistentVolume/PersistentVolumeNodeWidget';
 
 
 class Node extends React.Component {
@@ -41,6 +42,9 @@ class Node extends React.Component {
     }
     if (type === 'persistentVolumeClaim') {
       return <PersistentVolumeClaimNodeWidget node={{ name: 'PersVolClaim' }} color={color} displayOnly />;
+    }
+    if (type === 'persistentVolume') {
+      return <PersistentVolumeNodeWidget node={{ name: 'PersVol' }} color={color} displayOnly />;
     }
     
     console.warn('Unknown node type');
@@ -89,7 +93,9 @@ export class NodesPanel extends React.Component {
         <div className='node-wrapper'>
           <Node type='persistentVolumeClaim' color='rgb(10, 40, 180)' />
         </div>
-        
+        <div className='node-wrapper'>
+          <Node type='persistentVolume' color='rgb(110, 240, 80)' />
+        </div>
         
       </div>
     );

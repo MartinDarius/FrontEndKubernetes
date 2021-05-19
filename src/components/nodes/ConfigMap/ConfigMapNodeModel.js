@@ -6,7 +6,7 @@ import { updateModel } from "../../store/actions/diagram";
 export class ConfigMapNodeModel extends RJD.NodeModel {
   constructor(name = "Untitled", color = "rgb(224, 98, 20)") {
     super("configMap");
-    this.addPort(new RJD.DefaultPortModel(false, "output", "Pod"));
+    this.addPort(new RJD.DefaultPortModel(false, "output", "Depl"));
     this.addPort(new RJD.DefaultPortModel(true, "input", "Secr"));
     this.name = name;
     this.color = color;
@@ -93,7 +93,7 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
         this.getOutPort().links.constructor === Object
       )
     ) {
-      let podId =
+      let deplId =
         this.getOutPort()
           .getLinks()
           [Object.keys(this.getOutPort().getLinks())[0]].getTargetPort()
@@ -110,11 +110,11 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
               .getParent()
               .getID();
 
-      let podNode = this.model.nodes.filter((item) => item.id === podId)[0];
-      podNode.secretName=configMapNode.secretName;
-      podNode.secretKey=configMapNode.secretKey;
-      podNode.configMapName=configMapNode.configMapName;
-      podNode.configMapKey=configMapNode.key;
+      let deplNode = this.model.nodes.filter((item) => item.id === deplId)[0];
+      deplNode.secretName=configMapNode.secretName;
+      deplNode.secretKey=configMapNode.secretKey;
+      deplNode.configMapName=configMapNode.configMapName;
+      deplNode.configMapKey=configMapNode.key;
       
     }
     

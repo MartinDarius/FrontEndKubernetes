@@ -20,6 +20,8 @@ import { StorageClassNodeFactory } from '../nodes/storageClass/StorageClassInsta
 import { StorageClassWidgetFactory } from '../nodes/storageClass/StorageClassWidgetFactory';
 import { PersistentVolumeClaimNodeFactory } from '../nodes/persistentVolumeClaim/PersistentVolumeClaimInstanceFactories';
 import { PersistentVolumeClaimWidgetFactory } from '../nodes/persistentVolumeClaim/PersistentVolumeClaimWidgetFactory';
+import { PersistentVolumeNodeFactory } from '../nodes/persistentVolume/PersistentVolumeInstanceFactories';
+import { PersistentVolumeWidgetFactory } from '../nodes/persistentVolume/PersistentVolumeWidgetFactory';
 
 
 
@@ -38,7 +40,7 @@ diagramEngine.registerNodeFactory(new SecretWidgetFactory());
 diagramEngine.registerNodeFactory(new StatefulSetWidgetFactory());
 diagramEngine.registerNodeFactory(new StorageClassWidgetFactory());
 diagramEngine.registerNodeFactory(new PersistentVolumeClaimWidgetFactory());
-
+diagramEngine.registerNodeFactory(new PersistentVolumeWidgetFactory());
 
 
 
@@ -58,4 +60,5 @@ diagramEngine.registerInstanceFactory(new SecretNodeFactory());
 diagramEngine.registerInstanceFactory(new StatefulSetNodeFactory());
 diagramEngine.registerInstanceFactory(new StorageClassNodeFactory());
 diagramEngine.registerInstanceFactory(new PersistentVolumeClaimNodeFactory());
+diagramEngine.registerInstanceFactory(new PersistentVolumeNodeFactory());
 

@@ -15,10 +15,6 @@ export class PodNodeModel extends RJD.NodeModel {
     this.containerName = "";
     this.imagePullPolicy = "";
     this.command = "";
-    this.secretName="";
-    this.secretKey="";
-    this.configMapName="";
-    this.configMapKey="";
     this.model = {};
   }
 
@@ -33,10 +29,6 @@ export class PodNodeModel extends RJD.NodeModel {
     this.containerName = object.containerName;
     this.imagePullPolicy = object.imagePullPolicy;
     this.command = object.command;
-    this.configMapName=object.configMapName;
-    this.configMapKey=object.configMapKey;
-    this.secretName=object.secretName;
-    this.secretKey=object.secretKey;
     this.model = object.model;
   }
 
@@ -50,16 +42,12 @@ export class PodNodeModel extends RJD.NodeModel {
       containerName: this.containerName,
       imagePullPolicy: this.imagePullPolicy,
       command: this.command,
-      secretName: this.secretName,
-      secretKey: this.secretKey,
-      configMapName: this.configMapName,
-      configMapKey: this.configMapKey,
       model: this.model,
     });
   }
 
   generateYAML() {
-    let template= `apiVersion: v1
+    return `apiVersion: v1
     kind: Pod
     metadata:
       name:${this.podName}
@@ -69,29 +57,7 @@ export class PodNodeModel extends RJD.NodeModel {
           name: ${this.containerName}
           command: ${this.command}
           imagePullPolicy: ${this.imagePullPolicy}
-          env: `;
-
-      if(this.configMapName !==""){
-        template=template+ 
-        `  
-          - name: Trebuie sa il intreb pe domnul Zoltan
-            valueFrom:
-              configMapKeyRef:
-                name: ${this.configMapName}
-                key: ${this.configMapKey}
-        `
-      }
-      if(this.secretName !==""){
-        template=template+ 
-        `  
-          - name: Trebuie sa il intreb pe domnul Zoltan
-            valueFrom:
-             secretKeyRef:
-                name: ${this.secretName}
-                key: ${this.secretKey}
-        `
-      }
-      return template;
+         `;
   }
 
   getProperties() {
@@ -101,10 +67,16 @@ export class PodNodeModel extends RJD.NodeModel {
       containerName: this.containerName,
       imagePullPolicy: this.imagePullPolicy,
       command: this.command,
-      secretName: this.secretName,
-      secretKey: this.secretKey,
-      configMapName: this.configMapName,
-      configMapKey: this.configMapKey
+    };
+  }
+
+  getSomeProperties() {
+    return {
+      podName: this.podName,
+      image: this.image,
+      containerName: this.containerName,
+      imagePullPolicy: this.imagePullPolicy,
+      command: this.command,
     };
   }
 
@@ -168,17 +140,18 @@ export class PodNodeModel extends RJD.NodeModel {
               podNode = this.model.nodes.filter(
                 (item) => item.id === allLinks[j].source
               )[0];
-              podNode.podName = properties.podName;
-              podNode.image = properties.image;
-              podNode.containerName = properties.containerName;
-              podNode.imagePullPolicy = properties.imagePullPolicy;
-              podNode.command = properties.command;
+              if (podNode.name === "Pod") {
+                podNode.podName = properties.podName;
+                podNode.image = properties.image;
+                podNode.containerName = properties.containerName;
+                podNode.imagePullPolicy = properties.imagePullPolicy;
+                podNode.command = properties.command;
+              }
             }
           }
         }
       }
     }
-    //globalConst.updateModel(this.model, {selectedNode: null});
     store.dispatch(
       updateModel(Object.assign({}, this.model), { selectedNode: null })
     );

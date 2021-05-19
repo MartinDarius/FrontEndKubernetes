@@ -15,7 +15,6 @@ export const globalConst = {};
 
 
 class DiagramBuilder extends React.Component {
-  
 	onLogout = () => {
 			deleteCookie('userSession');
 			document.location.reload();

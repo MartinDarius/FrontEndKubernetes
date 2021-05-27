@@ -50,7 +50,7 @@ export class PodNodeModel extends RJD.NodeModel {
     return `apiVersion: v1
     kind: Pod
     metadata:
-      name:${this.podName}
+      name: ${this.podName}
     spec:
       containers:
         - image: ${this.image}
@@ -96,6 +96,7 @@ export class PodNodeModel extends RJD.NodeModel {
     podNode.containerName = properties.containerName;
     podNode.imagePullPolicy = properties.imagePullPolicy;
     podNode.command = properties.command;
+    podNode.name=properties.podName;
 
     if (
       !(

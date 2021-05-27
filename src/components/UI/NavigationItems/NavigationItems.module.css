@@ -28,7 +28,7 @@
 .logout a:hover,
 .logout a:active,
 .logout a.active {
-    color: #40A4C8;
+    color: #003EFF;
 }
 
 @media (min-width: 500px) {

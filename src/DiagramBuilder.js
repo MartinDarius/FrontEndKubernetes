@@ -23,7 +23,9 @@ class DiagramBuilder extends React.Component {
   render(){	 
   	const { model, selectedNode, onNodeSelected, updateModel } = this.props;
 	  globalConst.updateModel = updateModel;
-	  console.log("model", model)
+	  //export let json = JSON.stringify(JSON.decycle(model));
+	  //import let model = JSON.retrocycle(JSON.parse(json)); 
+	  console.log("model", model);
   	return (
     	<DndContext backend={HTML5Backend}>
     		<div className='parent-container'>
@@ -34,6 +36,7 @@ class DiagramBuilder extends React.Component {
   	        	onNodeSelected={onNodeSelected}
   	       	/>
   	      	<Controls
+				model={model}
   	        	selectedNode={selectedNode}
   	       />
 			</div>

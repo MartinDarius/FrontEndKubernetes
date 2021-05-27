@@ -187,6 +187,7 @@ export class DeploymentNodeModel extends RJD.NodeModel {
     deploymentNode.containerPort = properties.containerPort;
     deploymentNode.memory = properties.memory;
     deploymentNode.cpu = properties.cpu;
+    deploymentNode.name=properties.deploymentName;
 
     if (
       !(

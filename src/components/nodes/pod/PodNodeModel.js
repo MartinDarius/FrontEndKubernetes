@@ -20,7 +20,6 @@ export class PodNodeModel extends RJD.NodeModel {
 
   deSerialize(object) {
     super.deSerialize(object);
-    console.log("2");
 
     this.name = object.name;
     this.color = object.color;
@@ -47,7 +46,8 @@ export class PodNodeModel extends RJD.NodeModel {
   }
 
   generateYAML() {
-    return `apiVersion: v1
+    return `
+    apiVersion: v1
     kind: Pod
     metadata:
       name: ${this.podName}
@@ -96,7 +96,7 @@ export class PodNodeModel extends RJD.NodeModel {
     podNode.containerName = properties.containerName;
     podNode.imagePullPolicy = properties.imagePullPolicy;
     podNode.command = properties.command;
-    podNode.name=properties.podName;
+    //podNode.name=properties.podName;
 
     if (
       !(
@@ -129,7 +129,7 @@ export class PodNodeModel extends RJD.NodeModel {
       deploymentNode.containerName = properties.containerName;
       deploymentNode.imagePullPolicy = properties.imagePullPolicy;
 
-      if (deploymentNode.name === "Deployment") {
+      if ((deploymentNode.name === "Deployment") || (deploymentNode.name === "StatefulSet")) {
         let links = deploymentNode.ports[1].links;
         let allLinks = this.model.links;
         console.log(allLinks);

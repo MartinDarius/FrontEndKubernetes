@@ -45,12 +45,11 @@ export class PersistentVolumeNodeModel extends RJD.NodeModel {
   }
 
   generateYAML() {
-    return `apiVersion: v1
+    return `
+    apiVersion: v1
     kind: PersistentVolume
     metadata:
       name: ${this.persistentVolumeName}
-      labels:
-        type: local
     spec:
       storageClassName: ${this.storageClassName}
       capacity:

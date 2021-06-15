@@ -168,13 +168,27 @@ class Diagram extends React.Component {
     }
     serviceNode = model.nodes.filter((item) => item.id === serv.id)[0];
     if (depl.nodeType === "deployment") {
-      serviceNode.deploymentName = depl.deploymentName;
+      serviceNode.podName = depl.podName;
       serviceNode.targetPort = depl.containerPort;
     } else {
-      serviceNode.deploymentName = depl.statefulSetName;
+      serviceNode.podName = depl.podName;
       serviceNode.targetPort = depl.containerPort;
     }
   };
+
+  linkBetweenStatefulSetAndService = (model, node1, node2) => {
+    let setNode={}, serv={}, set={};
+
+    if(node1.nodeType === "service"){
+      serv = node1;
+      set = node2;
+    } else {
+      serv = node2;
+      set = node1;
+    }
+    setNode = model.nodes.filter((item) => item.id === set.id)[0];
+    setNode.serviceName=serv.serviceName;
+  }
 
   linkBetweenServiceAndIngress = (model, node1, node2) => {
     let ingressNode = {},
@@ -214,13 +228,14 @@ class Diagram extends React.Component {
     let secretProps = secr.getProperties();
     configMapNode.secretName = secretProps.secretName;
     configMapNode.secretKey = secretProps.secretKey;
+    configMapNode.nameInDeployment= secretProps.nameInDeployment;
   };
 
   linkBetweenConfigMapAndDepl = (model, node1, node2) => {
     let deplNode = {},
       depl = {},
       confMap = {};
-    if (node1.nodeType === "deployment") {
+    if (node1.nodeType === "deployment" || node1.nodeType === "statefulSet") {
       depl = node1;
       confMap = node2;
     } else {
@@ -233,6 +248,8 @@ class Diagram extends React.Component {
     deplNode.secretKey = configMapProps.secretKey;
     deplNode.configMapName = configMapProps.configMapName;
     deplNode.configMapKey = configMapProps.configMapKey;
+    deplNode.nameInDeployment = configMapProps.nameInDeployment;
+    deplNode.nameInDepl = configMapProps.nameInDepl;
 
   };
 
@@ -271,11 +288,10 @@ class Diagram extends React.Component {
   };
 
   linkBetweenPVCAndDepl = (model, node1, node2) => {
-    console.log("aici");
     let deplNode = {},
       pvc = {},
       depl = {};
-    if (node1.nodeType === "deployment") {
+    if ((node1.nodeType === "deployment") || (node1.type === "statefulSet")) {
       depl = node1;
       pvc = node2;
     } else {
@@ -335,14 +351,16 @@ class Diagram extends React.Component {
       ) {
         this.linkBetweenPodAndDeployment(model, node1, node2);
       } else if (
-        (node1.nodeType === "service" &&
-          (node2.nodeType === "deployment" ||
-            node2.nodeType === "statefulSet")) ||
-        ((node1.nodeType === "deployment" ||
-          node1.nodeType === "statefulSet") &&
-          node2.nodeType === "service")
+        (node1.nodeType === "service" && node2.nodeType === "deployment") ||
+        (node1.nodeType === "deployment" && node2.nodeType === "service")
       ) {
         this.linkBetweenDeploymentAndService(model, node1, node2);
+      } else if (
+        (node1.nodeType === "service" && node2.nodeType === "statefulSet") ||
+        (node1.nodeType === "statefulSet" && node2.nodeType === "service")
+      ) {
+        this.linkBetweenDeploymentAndService(model, node1, node2);
+        this.linkBetweenStatefulSetAndService(model,node1,node2);
       } else if (
         (node1.nodeType === "pod" && node2.nodeType === "statefulSet") ||
         (node1.nodeType === "statefulSet" && node2.nodeType === "pod")
@@ -363,7 +381,12 @@ class Diagram extends React.Component {
         (node1.nodeType === "configMap" && node2.nodeType === "deployment")
       ) {
         this.linkBetweenConfigMapAndDepl(model, node1, node2);
-      } else if (
+      }else if (
+        (node1.nodeType === "statefulSet" && node2.nodeType === "configMap") ||
+        (node1.nodeType === "configMap" && node2.nodeType === "statefulSet")
+      ) {
+        this.linkBetweenConfigMapAndDepl(model, node1, node2);
+      }  else if (
         (node1.nodeType === "storageClass" && node2.nodeType === "persistentVolumeClaim") ||
         (node1.nodeType === "persistentVolumeClaim" && node2.nodeType === "storageClass")
       ) {
@@ -374,11 +397,17 @@ class Diagram extends React.Component {
       ) {
         this.linkBetweenPVCAndDepl(model, node1, node2);
       } else if (
+        (node1.nodeType === "statefulSet" && node2.nodeType === "persistentVolumeClaim") ||
+        (node1.nodeType === "persistentVolumeClaim" && node2.nodeType === "statefulSet")
+      ) {
+        this.linkBetweenPVCAndDepl(model, node1, node2);
+      } else if (
         (node1.nodeType === "storageClass" && node2.nodeType === "persistentVolume") ||
         (node1.nodeType === "persistentVolume" && node2.nodeType === "storageClass")
       ) {
         this.linkBetweenSCAndPV(model, node1, node2);
       } 
+      
     }
 
     this.props.updateModel(model);

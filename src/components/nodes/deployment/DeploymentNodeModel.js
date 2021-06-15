@@ -27,6 +27,8 @@ export class DeploymentNodeModel extends RJD.NodeModel {
     this.mountPath = "";
     this.volumeName = "";
     this.claimName = "";
+    this.nameInDeployment = "";
+    this.nameInDepl = "";
   }
 
   deSerialize = (object) => {
@@ -50,6 +52,8 @@ export class DeploymentNodeModel extends RJD.NodeModel {
     this.mountPath = object.mountPath;
     this.volumeName = object.volumeName;
     this.claimName = object.claimName;
+    this.nameInDeployment= object.nameInDeployment;
+    this.nameInDepl = object.nameInDepl;
   };
 
   serialize = () => {
@@ -75,11 +79,14 @@ export class DeploymentNodeModel extends RJD.NodeModel {
       mountPath: this.mountPath,
       volumeName: this.volumeName,
       claimName: this.claimName,
+      nameInDeployment: this.nameInDeployment,
+      nameInDepl: this.nameInDepl
     });
   };
 
   generateYAML = () => {
-    let template = `apiVersion: apps/v1
+    let template = `
+    apiVersion: apps/v1
     kind: Deployment
     metadata:
       name: ${this.deploymentName}
@@ -96,13 +103,13 @@ export class DeploymentNodeModel extends RJD.NodeModel {
           containers:
             - name: ${this.containerName}
               image: ${this.image}
-              resources:
-                limits:
-                  memory: ${this.memory}
-                  cpu: ${this.cpu}
               imagePullPolicy: ${this.imagePullPolicy}
               ports:
-              - containerPort: ${this.containerPort}`;
+              - containerPort: ${this.containerPort}
+              resources:
+                limits:
+                  memory: "${this.memory}"
+                  cpu: "${this.cpu}"`;
 
     if (this.claimName !== "") {
       template =
@@ -110,7 +117,7 @@ export class DeploymentNodeModel extends RJD.NodeModel {
         `
               volumeMounts:
                 - name: ${this.volumeName}
-                mountPath: ${this.mountPath}`;
+                  mountPath: ${this.mountPath}`;
     }
 
     if (this.configMapName !== "") {
@@ -118,7 +125,7 @@ export class DeploymentNodeModel extends RJD.NodeModel {
         template +
         `   
               env:
-                - name: Trebuie sa il intreb pe domnul Zoltan
+                - name: ${this.nameInDepl}
                   valueFrom:
                     configMapKeyRef:
                       name: ${this.configMapName}
@@ -128,9 +135,9 @@ export class DeploymentNodeModel extends RJD.NodeModel {
       template =
         template +
         `  
-                - name: Trebuie sa il intreb pe domnul Zoltan
+                - name: ${this.nameInDeployment}
                   valueFrom:
-                  secretKeyRef:
+                    secretKeyRef:
                       name: ${this.secretName}
                       key: ${this.secretKey}`;
     }
@@ -141,8 +148,8 @@ export class DeploymentNodeModel extends RJD.NodeModel {
         `    
           volumes:
             - name: ${this.volumeName}
-            persistentVolumeClaim:
-              claimName: ${this.claimName}
+              persistentVolumeClaim:
+                claimName: ${this.claimName}
       `;
     }
 
@@ -206,18 +213,24 @@ export class DeploymentNodeModel extends RJD.NodeModel {
         .getParent()
         .getID();
 
-      let serviceId;
+      let serviceId,deplId;
       if (serviceId1 === this.id) {
         serviceId = serviceId2;
+        deplId = serviceId1;
       } else {
         serviceId = serviceId1;
+        deplId=serviceId2;
       }
 
       let serviceNode = this.model.nodes.filter(
         (item) => item.id === serviceId
       )[0];
 
-      serviceNode.deploymentName = properties.deploymentName;
+      let deplNode = this.model.nodes.filter(
+        (item) => item.id === deplId
+      )[0];
+
+      serviceNode.podName = deplNode.podName;
       serviceNode.targetPort = properties.containerPort;
     }
     //globalConst.updateModel(this.model, {selectedNode: null});

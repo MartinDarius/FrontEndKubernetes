@@ -21,7 +21,6 @@
     $ref, decycle, forEach, get, indexOf, isArray, keys, length, push,
     retrocycle, set, stringify, test
 */
-console.log("improted");
 
 if (typeof JSON.decycle !== "function") {
     JSON.decycle = function decycle(object, replacer) {

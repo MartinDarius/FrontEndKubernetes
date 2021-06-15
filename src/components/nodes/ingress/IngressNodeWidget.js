@@ -53,7 +53,7 @@ export class IngressNodeWidget extends React.Component {
             {name}
           
           </div>
-          {displayOnly? '' :<FormDialog properties={node.getProperties ? node.getProperties() : null} onSubmit={node.onSubmit}/>}
+          {displayOnly? '' :<FormDialog properties={node.getProperties ? node.getSomeProperties() : null} onSubmit={node.onSubmit}/>}
           {!displayOnly ? <div className='fa fa-close' onClick={this.onRemove.bind(this)} /> : null}
         </div>
         <div className='ports'>

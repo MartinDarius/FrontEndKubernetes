@@ -46,7 +46,8 @@ export class StorageClassNodeModel extends RJD.NodeModel {
   }
 
   generateYAML() {
-    return `apiVersion: storage.k8s.io/v1
+    return `
+  apiVersion: storage.k8s.io/v1
   kind: StorageClass
   metadata:
     name: ${this.storageClassName}
@@ -55,7 +56,7 @@ export class StorageClassNodeModel extends RJD.NodeModel {
     storageAccount: ${this.storageAccount}
   reclaimPolicy: ${this.reclaimPolicy}
   allowVolumeExpansion: ${this.allowVolExp}
- `;
+  `;
   }
 
   getProperties() {

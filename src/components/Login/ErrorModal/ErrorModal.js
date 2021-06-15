@@ -8,7 +8,7 @@ const ErrorModal = (props) => {
 
     return(
         <div className="modal">
-            <h2>Your credentials are not correct!</h2>
+            <h2>{props.message}</h2>
             <button className='button' onClick={onOkHandler}>OK</button> 
         </div>
     )

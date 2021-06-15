@@ -40,7 +40,8 @@ export class IngressNodeModel extends RJD.NodeModel {
   
   generateYAML = () =>{
     let template=
-    `apiVersion: extensions/v1beta1
+    `
+    apiVersion: networking.k8s.io/v1
     kind: Ingress
     metadata:
       name: ${this.ingressName}
@@ -55,15 +56,17 @@ export class IngressNodeModel extends RJD.NodeModel {
      template= template+ 
       ` 
        - host: ${this.serviceProp[i].serviceHost}
-           http:
+         http:
              paths:
-               - backend:
+              - pathType: Prefix
+                path: ${this.serviceProp[i].servicePath}
+                backend:
                   service:
                     name: ${this.serviceProp[i].serviceName}
                     port:
                       number: ${this.serviceProp[i].servicePort}
-                 path: ${this.serviceProp[i].servicePath}
-                 pathType: Prefix`;
+                    
+                `;
      }
     return template;
         
@@ -72,6 +75,11 @@ export class IngressNodeModel extends RJD.NodeModel {
   getProperties = () =>{
 
     return {ingressName: this.ingressName, serviceProp: this.serviceProp}; 
+  }
+
+  getSomeProperties = () =>{
+
+    return {ingressName: this.ingressName}; 
   }
 
   getInPort = () => {

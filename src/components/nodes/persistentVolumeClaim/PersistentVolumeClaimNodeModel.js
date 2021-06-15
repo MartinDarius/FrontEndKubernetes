@@ -48,7 +48,8 @@ export class PersistentVolumeClaimNodeModel extends RJD.NodeModel {
   }
 
   generateYAML() {
-    return `apiVersion: v1
+    return `
+    apiVersion: v1
     kind: PersistentVolumeClaim
     metadata:
       name: ${this.persistentVolumeClaimName}
@@ -59,8 +60,7 @@ export class PersistentVolumeClaimNodeModel extends RJD.NodeModel {
         requests:
           storage: ${this.storage}
       storageClassName: ${this.storageClassName}
-
- `;
+  `;
   }
 
   getProperties() {
@@ -68,6 +68,16 @@ export class PersistentVolumeClaimNodeModel extends RJD.NodeModel {
       persistentVolumeClaimName: this.persistentVolumeClaimName,
       storage: this.storage,
       storageClassName: this.storageClassName,
+      accessModes: this.accessModes,
+      volumeName: this.volumeName,
+      mountPath: this.mountPath,
+    };
+  }
+
+  getSomeProperties() {
+    return {
+      persistentVolumeClaimName: this.persistentVolumeClaimName,
+      storage: this.storage,
       accessModes: this.accessModes,
       volumeName: this.volumeName,
       mountPath: this.mountPath,

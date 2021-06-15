@@ -68,4 +68,3 @@ export class PodNodeWidget extends React.Component {
 }
 
 export const PodNodeWidgetFactory = React.createFactory(PodNodeWidget);
-//export const PodNodeWidgetFactory = React.createElement(PodNodeWidget);

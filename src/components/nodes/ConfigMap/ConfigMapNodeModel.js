@@ -16,6 +16,8 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
     this.value = "";
     this.secretName = "";
     this.secretKey = "";
+    this.nameInDeployment = "";
+    this.nameInDepl="";
   }
 
   deSerialize(object) {
@@ -28,6 +30,8 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
     this.secretName = object.secretName;
     this.secretKey = object.secretKey;
     this.model = object.model;
+    this.nameInDeployment= object.nameInDeployment;
+    this.nameInDepl=object.nameInDepl;
   }
 
   serialize() {
@@ -40,11 +44,14 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       value: this.value,
       secretName: this.secretName,
       secretKey: this.secretKey,
+      nameInDeployment: this.nameInDeployment,
+      nameInDepl: this.nameInDepl,
     });
   }
 
   generateYAML() {
-    return `apiVersion: v1
+    return `
+    apiVersion: v1
     kind: ConfigMap
     metadata:
       name:${this.configMapName}
@@ -57,6 +64,7 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       configMapName: this.configMapName,
       key: this.key,
       value: this.value,
+      nameInDepl: this.nameInDepl
     };
   }
 
@@ -67,6 +75,8 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       value: this.value,
       secretName: this.secretName,
       secretKey: this.secretKey,
+      nameInDeployment: this.nameInDeployment,
+      nameInDepl: this.nameInDepl
     };
   }
 
@@ -86,6 +96,7 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
     configMapNode.configMapName = properties.configMapName;
     configMapNode.key = properties.key;
     configMapNode.value = properties.value;
+    configMapNode.nameInDepl= properties.nameInDepl;
 
     if (
       !(
@@ -115,6 +126,8 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       deplNode.secretKey=configMapNode.secretKey;
       deplNode.configMapName=configMapNode.configMapName;
       deplNode.configMapKey=configMapNode.key;
+      deplNode.nameInDeployment= configMapNode.nameInDeployment;
+      deplNode.nameInDepl= configMapNode.nameInDepl;
       
     }
     

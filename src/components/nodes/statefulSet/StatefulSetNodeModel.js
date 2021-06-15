@@ -20,11 +20,18 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
     this.seconds = 0;
     this.image = "";
     this.containerPort = "";
-    this.volumeMountsName = "";
+    this.volumeName = "";
     this.mountPath = "";
     this.accessModes = "";
     this.storageClassName = "";
     this.storage = "";
+    this.secretName = "";
+    this.secretKey = "";
+    this.configMapName = "";
+    this.configMapKey = "";
+    this.claimName = "";
+    this.nameInDeployment = "";
+    this.nameInDepl = "";
   }
 
   deSerialize(object) {
@@ -40,12 +47,19 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
     this.seconds = object.seconds;
     this.image = object.image;
     this.containerPort = object.containerPort;
-    this.volumeMountsName = object.volumeMountsName;
+    this.volumeName = object.volumeName;
     this.mountPath = object.mountPath;
     this.accessModes = object.accessModes;
     this.storageClassName = object.storageClassName;
     this.storage = object.storage;
     this.model = object.model;
+    this.secretName = object.secretName;
+    this.secretKey = object.secretKey;
+    this.configMapName = object.configMapName;
+    this.configMapKey = object.configMapKey;
+    this.claimName = object.claimName;
+    this.nameInDeployment= object.nameInDeployment;
+    this.nameInDepl = object.nameInDepl;
   }
 
   serialize() {
@@ -62,17 +76,25 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
       seconds: this.seconds,
       image: this.image,
       containerPort: this.containerPort,
-      volumeMountsName: this.volumeMountsName,
+      volumeName: this.volumeName,
       mountPath: this.mountPath,
       accessModes: this.accessModes,
       storageClassName: this.storageClassName,
       storage: this.storage,
       model: this.model,
+      secretName: this.secretName,
+      secretKey: this.secretKey,
+      configMapName: this.configMapName,
+      configMapKey: this.configMapKey,
+      claimName: this.claimName,
+      nameInDeployment: this.nameInDeployment,
+      nameInDepl: this.nameInDepl
     });
   }
 
   generateYAML() {
-    return `apiVersion: apps/v1
+    let template= `
+    apiVersion: apps/v1
     kind: StatefulSet
     metadata:
       name: ${this.statefulSetName}
@@ -80,8 +102,8 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
       selector:
         matchLabels:
           app: ${this.podName} 
-      serviceName: ${this.serviceName}
       replicas: ${this.replicas}
+      serviceName: ${this.serviceName}
       template:
         metadata:
           labels:
@@ -92,20 +114,51 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
           - name: ${this.containerName}
             image: ${this.image}
             ports:
-            - containerPort: ${this.containerPort}
-              name: ${this.portName}
+            - containerPort: ${this.containerPort}`;
+
+    if (this.claimName !== "") {
+      template =
+        template +
+        `
             volumeMounts:
-            - name: ${this.volumeMountsName}
-              mountPath: ${this.mountPath}
-      volumeClaimTemplates:
-      - metadata:
-          name: ${this.volumeMountsName}
-        spec:
-          accessModes: [ "${this.accessModes}" ]
-          storageClassName: "${this.storageClassName}"
-          resources:
-            requests:
-              storage: ${this.storage}`;
+              - name: ${this.volumeName}
+                mountPath: ${this.mountPath}`;
+    }
+
+    if (this.configMapName !== "") {
+      template =
+        template +
+        `   
+            env:
+              - name: ${this.nameInDepl}
+                valueFrom:
+                  configMapKeyRef:
+                    name: ${this.configMapName}
+                    key: ${this.configMapKey}`;
+    }
+    if (this.secretName !== "") {
+      template =
+        template +
+        `  
+              - name: ${this.nameInDeployment}
+                valueFrom:
+                  secretKeyRef:
+                    name: ${this.secretName}
+                    key: ${this.secretKey}`;
+    }
+
+    if (this.claimName !== "") {
+      template =
+        template +
+        `    
+          volumes:
+            - name: ${this.volumeName}
+              persistentVolumeClaim:
+                claimName: ${this.claimName}
+      `;
+    }
+
+    return template;
   }
 
   getProperties() {
@@ -118,11 +171,19 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
       image: this.image,
       containerPort: this.containerPort,
       portName: this.portName,
-      volumeMountsName: this.volumeMountsName,
+      volumeName: this.volumeName,
       mountPath: this.mountPath,
       accessModes: this.accessModes,
       storageClassName: this.storageClassName,
       storage: this.storage,
+    };
+  }
+
+  getSomeProperties() {
+    return {
+      statefulSetName: this.statefulSetName,
+      seconds: this.seconds,
+      containerPort: this.containerPort,
     };
   }
 
@@ -140,15 +201,8 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
     )[0];
 
     statefulSetNode.statefulSetName = properties.statefulSetName;
-    statefulSetNode.podName = properties.podName;
-    statefulSetNode.serviceName = properties.serviceName;
     statefulSetNode.seconds = properties.seconds;
     statefulSetNode.containerPort = properties.containerPort;
-    statefulSetNode.volumeMountsName = properties.volumeMountsName;
-    statefulSetNode.mountPath = properties.mountPath;
-    statefulSetNode.accessModes = properties.accessModes;
-    statefulSetNode.storageClassName = properties.storageClassName;
-    statefulSetNode.storage = properties.storage;
 
     if (
       !(
@@ -167,18 +221,23 @@ export class StatefulSetNodeModel extends RJD.NodeModel {
         .getParent()
         .getID();
 
-      let serviceId;
+      let serviceId,setId;
       if (serviceId1 === this.id) {
         serviceId = serviceId2;
+        setId= serviceId1;
       } else {
         serviceId = serviceId1;
+        setId= serviceId2;
       }
 
       let serviceNode = this.model.nodes.filter(
         (item) => item.id === serviceId
       )[0];
-
-      serviceNode.deploymentName = properties.statefulSetName;
+      let setNode = this.model.nodes.filter(
+        (item) => item.id === setId
+      )[0];
+  
+      serviceNode.podName = setNode.podName;
       serviceNode.targetPort = properties.containerPort;
     }
 

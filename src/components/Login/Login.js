@@ -5,23 +5,25 @@ import "./Login.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import loginImg from "../../assets/images/kubernetes.png";
-import ErrorModal from './ErrorModal/ErrorModal';
-import Backdrop from './ErrorModal/Backdrop';
+import ErrorModal from "./ErrorModal/ErrorModal";
+import Backdrop from "./ErrorModal/Backdrop";
 
 import axios from "axios";
 
 class Login extends React.Component {
   state = {
-    email: "aaa@aaa.com",
-    password: "aaa123",
+    email: "testemail2@yahoo.com",
+    password: "parola",
     error: false,
+    registered: false,
   };
 
   validateData = () => {
     let ok = true;
     if (this.state.email.length === 0 || this.state.password.length < 6)
       ok = false;
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return ok && re.test(String(this.state.email).toLowerCase());
   };
 
@@ -29,38 +31,36 @@ class Login extends React.Component {
     const authData = {
       email: this.state.email,
       password: this.state.password,
-      returnSecureToken: true,
     };
+
     axios
-      .post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAnb1vd5rxrNJbJWbAoftTrKNIKwiV0JLk",
-        authData
-      )
+      .post("http://localhost:5000/api/auth/login", authData)
       .then((response) => {
         console.log(response);
-        setCookie("userSession", response.data.idToken);
+        setCookie("userSession", response.data.token);
         document.location.reload();
       })
       .catch((err) => {
         console.log(err);
         this.setState({ error: true });
       });
-      event.preventDefault();
+
+    event.preventDefault();
   };
 
   onRegister = (event) => {
     const authData = {
       email: this.state.email,
       password: this.state.password,
-      returnSecureToken: true,
     };
     axios
       .post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAnb1vd5rxrNJbJWbAoftTrKNIKwiV0JLk",
+        "http://localhost:5000/api/auth/signup",
         authData
       )
       .then((response) => {
         console.log(response);
+        this.setState({...this.state,registered:true})
       })
       .catch((err) => {
         console.log(err);
@@ -72,7 +72,8 @@ class Login extends React.Component {
 
   closeModal = () => {
     this.setState({ error: false });
-  }
+    this.setState({registered: false});
+  };
 
   render() {
     return (
@@ -132,8 +133,9 @@ class Login extends React.Component {
             </div>
           </Form>
         </div>
-        {this.state.error  && <ErrorModal onConfirm={this.closeModal}/>}
-        {this.state.error && <Backdrop onClick={this.closeModal}/>}
+        {this.state.error && <ErrorModal message="Your credentials are not correct" onConfirm={this.closeModal} />}
+        {this.state.registered && <ErrorModal  message="Successfully registered!" onConfirm={this.closeModal} />}
+        {(this.state.error || this.state.registered) && <Backdrop onClick={this.closeModal} />}
       </div>
     );
   }

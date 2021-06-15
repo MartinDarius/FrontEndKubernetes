@@ -14,6 +14,8 @@ export class SecretNodeModel extends RJD.NodeModel {
     this.secretName = " ";
     this.key = "";
     this.value = "";
+    this.types= "";
+    this.nameInDeployment="";
   }
 
   deSerialize(object) {
@@ -24,6 +26,8 @@ export class SecretNodeModel extends RJD.NodeModel {
     this.key = object.key;
     this.value = object.value;
     this.model = object.model;
+    this.types= object.types;
+    this.nameInDeployment= object.nameInDeployment;
   }
 
   serialize() {
@@ -35,14 +39,18 @@ export class SecretNodeModel extends RJD.NodeModel {
       key: this.key,
       value: this.value,
       model: this.model,
+      types: this.types,
+      nameInDeployment: this.nameInDeployment,
     });
   }
 
   generateYAML() {
-    return `apiVersion: v1
+    return `
+    apiVersion: v1
     kind: Secret
     metadata:
       name:${this.secretName}
+    type: ${this.types}
     data: 
       ${this.key}: ${this.value}`;
   }
@@ -52,6 +60,8 @@ export class SecretNodeModel extends RJD.NodeModel {
       secretName: this.secretName,
       key: this.key,
       value: this.value,
+      types: this.types,
+      nameInDeployment: this.nameInDeployment
     };
   }
 
@@ -68,6 +78,8 @@ export class SecretNodeModel extends RJD.NodeModel {
     secretNode.secretName = properties.secretName;
     secretNode.key = properties.key;
     secretNode.value = properties.value;
+    secretNode.types = properties.types;
+    secretNode.nameInDeployment = properties.nameInDeployment;
 
     if (
       !(
@@ -98,6 +110,7 @@ export class SecretNodeModel extends RJD.NodeModel {
 
       confMapNode.secretName = properties.secretName;
       confMapNode.secretKey = properties.key;
+      confMapNode.nameInDeployment = properties.nameInDeployment;
     }
     store.dispatch(
       updateModel(Object.assign({}, this.model), { selectedNode: null })

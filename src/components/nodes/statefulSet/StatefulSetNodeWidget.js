@@ -51,7 +51,7 @@ export class StatefulSetNodeWidget extends React.Component {
           <div className='name'>
             {name}
           </div>
-          {displayOnly? '' :<FormDialog properties={node.getProperties ? node.getProperties() : null} onSubmit={node.onSubmit}/>}
+          {displayOnly? '' :<FormDialog properties={node.getProperties ? node.getSomeProperties() : null} onSubmit={node.onSubmit}/>}
           {!displayOnly ? <div className='fa fa-close' onClick={this.onRemove.bind(this)} /> : null}
         </div>
         <div className='ports'>

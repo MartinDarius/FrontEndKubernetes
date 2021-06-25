@@ -227,8 +227,30 @@ class Diagram extends React.Component {
     configMapNode = model.nodes.filter((item) => item.id === confMap.id)[0];
     let secretProps = secr.getProperties();
     configMapNode.secretName = secretProps.secretName;
-    configMapNode.secretKey = secretProps.secretKey;
+    configMapNode.secretKey = secretProps.key;
+    configMapNode.secretKey2 = secretProps.key2;
     configMapNode.nameInDeployment= secretProps.nameInDeployment;
+    configMapNode.nameInDeployment2= secretProps.nameInDeployment2;
+  };
+
+  linkBetweenSecretAndDepl = (model, node1, node2) => {
+    let deplNode = {},
+      secr = {},
+      depl = {};
+    if (node1.nodeType === "secret") {
+      secr = node1;
+      depl = node2;
+    } else {
+      secr = node2;
+      depl = node1;
+    }
+    deplNode = model.nodes.filter((item) => item.id === depl.id)[0];
+    let secretProps = secr.getProperties();
+    deplNode.secretName = secretProps.secretName;
+    deplNode.secretKey = secretProps.key;
+    deplNode.secretKey2 = secretProps.key2;
+    deplNode.nameInDeployment= secretProps.nameInDeployment;
+    deplNode.nameInDeployment2= secretProps.nameInDeployment2;
   };
 
   linkBetweenConfigMapAndDepl = (model, node1, node2) => {
@@ -250,6 +272,10 @@ class Diagram extends React.Component {
     deplNode.configMapKey = configMapProps.configMapKey;
     deplNode.nameInDeployment = configMapProps.nameInDeployment;
     deplNode.nameInDepl = configMapProps.nameInDepl;
+    deplNode.secretKey2 = configMapProps.secretKey2;
+    deplNode.nameInDeployment2 = configMapProps.nameInDeployment2;
+
+
 
   };
 
@@ -406,10 +432,20 @@ class Diagram extends React.Component {
         (node1.nodeType === "persistentVolume" && node2.nodeType === "storageClass")
       ) {
         this.linkBetweenSCAndPV(model, node1, node2);
+      } else if (
+        (node1.nodeType === "secret" && node2.nodeType === "deployment") ||
+        (node1.nodeType === "deployment" && node2.nodeType === "secret")
+      ) {
+        this.linkBetweenSecretAndDepl(model, node1, node2);
+      } else if (
+        (node1.nodeType === "secret" && node2.nodeType === "statefulSet") ||
+        (node1.nodeType === "statefulSet" && node2.nodeType === "secret")
+      ) {
+        this.linkBetweenSecretAndDepl(model, node1, node2);
       } 
       
     }
-
+    
     this.props.updateModel(model);
   }
 

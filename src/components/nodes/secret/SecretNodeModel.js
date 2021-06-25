@@ -6,7 +6,7 @@ import { updateModel } from "../../store/actions/diagram";
 export class SecretNodeModel extends RJD.NodeModel {
   constructor(name = "Untitled", color = "rgb(224, 98, 20)") {
     super("secret");
-    this.addPort(new RJD.DefaultPortModel(false, "output", "CfMap"));
+    this.addPort(new RJD.DefaultPortModel(false, "output", "Out"));
     this.addPort(new RJD.DefaultPortModel(true, "input", "In"));
     this.name = name;
     this.color = color;
@@ -16,6 +16,10 @@ export class SecretNodeModel extends RJD.NodeModel {
     this.value = "";
     this.types= "";
     this.nameInDeployment="";
+    this.key2="";
+    this.value2="";
+    this.nameInDeployment2="";
+
   }
 
   deSerialize(object) {
@@ -28,6 +32,10 @@ export class SecretNodeModel extends RJD.NodeModel {
     this.model = object.model;
     this.types= object.types;
     this.nameInDeployment= object.nameInDeployment;
+    this.key2 = object.key2;
+    this.value2 = object.value2;
+    this.nameInDeployment2= object.nameInDeployment2;
+
   }
 
   serialize() {
@@ -41,11 +49,15 @@ export class SecretNodeModel extends RJD.NodeModel {
       model: this.model,
       types: this.types,
       nameInDeployment: this.nameInDeployment,
+      key2: this.key2,
+      value2: this.value2,
+      nameInDeployment2: this.nameInDeployment2,
+
     });
   }
 
   generateYAML() {
-    return `
+    let template= `
     apiVersion: v1
     kind: Secret
     metadata:
@@ -53,15 +65,26 @@ export class SecretNodeModel extends RJD.NodeModel {
     type: ${this.types}
     data: 
       ${this.key}: ${this.value}`;
+
+    if(this.key2 !== ""){
+      template+=`
+      ${this.key2}: ${this.value2}`
+    }
+
+      return template;
   }
 
   getProperties() {
     return {
       secretName: this.secretName,
+      types: this.types,
       key: this.key,
       value: this.value,
-      types: this.types,
-      nameInDeployment: this.nameInDeployment
+      nameInDeployment: this.nameInDeployment,
+      key2: this.key2,
+      value2: this.value2,
+      nameInDeployment2: this.nameInDeployment2,
+
     };
   }
 
@@ -80,6 +103,9 @@ export class SecretNodeModel extends RJD.NodeModel {
     secretNode.value = properties.value;
     secretNode.types = properties.types;
     secretNode.nameInDeployment = properties.nameInDeployment;
+    secretNode.key2 = properties.key2;
+    secretNode.value2 = properties.value2;
+    secretNode.nameInDeployment2 = properties.nameInDeployment2;
 
     if (
       !(
@@ -110,7 +136,10 @@ export class SecretNodeModel extends RJD.NodeModel {
 
       confMapNode.secretName = properties.secretName;
       confMapNode.secretKey = properties.key;
+      confMapNode.secretKey2 = properties.key2;
       confMapNode.nameInDeployment = properties.nameInDeployment;
+      confMapNode.nameInDeployment2 = properties.nameInDeployment2;
+
     }
     store.dispatch(
       updateModel(Object.assign({}, this.model), { selectedNode: null })

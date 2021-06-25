@@ -18,6 +18,9 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
     this.secretKey = "";
     this.nameInDeployment = "";
     this.nameInDepl="";
+    this.secretKey2 = "";
+    this.nameInDeployment2 = "";
+
   }
 
   deSerialize(object) {
@@ -32,6 +35,10 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
     this.model = object.model;
     this.nameInDeployment= object.nameInDeployment;
     this.nameInDepl=object.nameInDepl;
+    this.secretKey2 = object.secretKey2;
+    this.nameInDeployment2= object.nameInDeployment2;
+
+
   }
 
   serialize() {
@@ -46,6 +53,9 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       secretKey: this.secretKey,
       nameInDeployment: this.nameInDeployment,
       nameInDepl: this.nameInDepl,
+      secretKey2: this.secretKey2,
+      nameInDeployment2: this.nameInDeployment2,
+
     });
   }
 
@@ -76,7 +86,9 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       secretName: this.secretName,
       secretKey: this.secretKey,
       nameInDeployment: this.nameInDeployment,
-      nameInDepl: this.nameInDepl
+      nameInDepl: this.nameInDepl,   
+      secretKey2: this.secretKey2,
+      nameInDeployment2: this.nameInDeployment2,
     };
   }
 
@@ -128,7 +140,10 @@ export class ConfigMapNodeModel extends RJD.NodeModel {
       deplNode.configMapKey=configMapNode.key;
       deplNode.nameInDeployment= configMapNode.nameInDeployment;
       deplNode.nameInDepl= configMapNode.nameInDepl;
-      
+      deplNode.secretKey2=configMapNode.secretKey2;
+      deplNode.nameInDeployment2= configMapNode.nameInDeployment2;
+
+
     }
     
     store.dispatch(

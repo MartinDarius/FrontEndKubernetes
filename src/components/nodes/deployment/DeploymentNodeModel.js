@@ -29,6 +29,8 @@ export class DeploymentNodeModel extends RJD.NodeModel {
     this.claimName = "";
     this.nameInDeployment = "";
     this.nameInDepl = "";
+    this.secretKey2 = "";
+    this.nameInDeployment2 = "";
   }
 
   deSerialize = (object) => {
@@ -54,6 +56,9 @@ export class DeploymentNodeModel extends RJD.NodeModel {
     this.claimName = object.claimName;
     this.nameInDeployment= object.nameInDeployment;
     this.nameInDepl = object.nameInDepl;
+    this.secretKey2 = object.secretKey2;
+    this.nameInDeployment2= object.nameInDeployment2;
+
   };
 
   serialize = () => {
@@ -80,7 +85,10 @@ export class DeploymentNodeModel extends RJD.NodeModel {
       volumeName: this.volumeName,
       claimName: this.claimName,
       nameInDeployment: this.nameInDeployment,
-      nameInDepl: this.nameInDepl
+      nameInDepl: this.nameInDepl,
+      secretKey2: this.secretKey2,
+      nameInDeployment2: this.nameInDeployment2,
+
     });
   };
 
@@ -140,6 +148,16 @@ export class DeploymentNodeModel extends RJD.NodeModel {
                     secretKeyRef:
                       name: ${this.secretName}
                       key: ${this.secretKey}`;
+    }
+    if (this.secretKey2 !== "") {
+      template =
+        template +
+        `  
+                - name: ${this.nameInDeployment2}
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${this.secretName}
+                      key: ${this.secretKey2}`;
     }
 
     if (this.claimName !== "") {

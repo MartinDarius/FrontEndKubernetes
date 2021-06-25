@@ -50,6 +50,8 @@ export class PersistentVolumeNodeModel extends RJD.NodeModel {
     kind: PersistentVolume
     metadata:
       name: ${this.persistentVolumeName}
+      labels:
+        type: local
     spec:
       storageClassName: ${this.storageClassName}
       capacity:

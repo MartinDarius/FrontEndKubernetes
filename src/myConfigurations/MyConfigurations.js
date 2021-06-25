@@ -167,7 +167,22 @@ export default function MyConfigurations() {
     let payload = [];
 
     nodes.map((node) => {
-      if (node.name !== "Pod") {
+      if (node.name !== "Pod" && node.type !== "deployment" && node.type !== "service" && node.type !== "ingress") {
+        payload.push(node.name);
+      }
+    });
+    nodes.map((node) => {
+      if (node.type === "deployment") {
+        payload.push(node.name);
+      }
+    });
+    nodes.map((node) => {
+      if (node.type === "service") {
+        payload.push(node.name);
+      }
+    });
+    nodes.map((node) => {
+      if (node.type === "ingress") {
         payload.push(node.name);
       }
     });
